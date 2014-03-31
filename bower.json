@@ -1,0 +1,14 @@
+{
+  "name": "PublicUtilities",
+  "version": "0.0.1",
+  "dependencies": {
+    "dojo": "~1.9",
+    "dojox": "~1.9",
+    "dijit": "~1.9",
+    "util": "dojo-util#~1.9",
+    "bootstrap": "~3",
+    "jquery": "~1",
+    "agrc": "agrc-widgets#630640d27896e3792b31fce10d09f31094db6d5d",
+    "ijit": "agrc-ijit#84eef80e8ba799d944b71cd74c18272c16d0f417"
+  }
+}

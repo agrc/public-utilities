@@ -1,0 +1,15 @@
+*.pyc
+*.sublime-workspace
+.DS_Store
+.grunt/
+dist/
+node_modules/
+src/agrc/
+src/bootstrap/
+src/dijit/
+src/dojo/
+src/dojox/
+src/ijit/
+src/jquery/
+src/stubmodule/
+src/util/
