@@ -9,16 +9,11 @@ define(['dojo/has'], function(has) {
 
         // version: String
         //      The version number.
-        version: '2.1.0',
+        version: '0.1.0',
 
         // apiKey: String
         //      The api key used for services on api.mapserv.utah.gov
         apiKey: '',
-
-        // exportWebMapUrl: String
-        //      print task url
-        exportWebMapUrl: 'http://mapserv.utah.gov/arcgis/rest/services/Utilities/' +
-            'PrintingTools/GPServer/Export%20Web%20Map%20Task',
 
         urls: {
             vector: 'http://mapserv.utah.gov/arcgis/rest/services/BaseMaps/Vector/MapServer'
@@ -28,7 +23,7 @@ define(['dojo/has'], function(has) {
     if (has('agrc-api-key') === 'prod') {
         window.AGRC.apiKey = 'prod';
     } else if (has('agrc-api-key') === 'stage') {
-        window.AGRC.apiKey = 'stage';
+        window.AGRC.apiKey = 'AGRC-FFCDAD6B933051';
     } else {
         window.AGRC.apiKey = 'AGRC-B5D62BD2151902';
     }

@@ -1,12 +1,7 @@
 @import '../../dijit/themes/claro/claro.css';
 @import '../../esri/css/esri.css';
 @import '../../agrc/resources/map/BaseMap.css';
-@import '../../ijit/themes/standard/layout/SideBarToggler.css';
-@import '../../ijit/themes/standard/layout/PaneStack.css';
-@import '../../agrc/resources/map/BaseMapSelector.css';
 @import '../../agrc/resources/locate/FindAddress.css';
-@import '../../agrc/resources/locate/MagicZoom.css';
-/*@import '../../bootstrap/css/bootstrap.css';*/
 
 body, html, .app {
     width: 100%;
@@ -20,72 +15,51 @@ body, html, .app {
     border: 1px solid #b5bcc7;
 }
 
-/* TITLE PANE */
-.app .title-container {
-    position: absolute;
-    top: 5px;
-    left: 5px;
-    right: 5px;
-    padding: 8px;
-}
-.app .title-container h1 {
-    font-family: Arial, sans-serif;
-    margin: 5px 0 0 5px;
-    font-size: 40px;
-    letter-spacing: -2px;
-}
-.app .title-container .version {
-    font-size: 16px;
-    text-decoration: none;
-    color: gray;
-    letter-spacing: 0;
-}
-.app .title-container .version:hover {
-    text-decoration: underline !important;
-}
-.app .title-container>img {
-    position: absolute;
-    top: -3px;
-    right: 0;
-}
-.app [data-dojo-attach-point='popupBlurb'] {
-    display: none;
-}
-
 /* SIDE BAR */
 .app .side-bar-container {
     width: 300px;
+    padding: 0;
     overflow-y: auto;
     overflow-x: hidden;
     position: absolute;
-    left: 5px;
-    top: 75px;
+    right: 5px;
+    top: 5px;
     bottom: 5px;
 }
-.app .side-bar-padder {
-    padding: 10px;
-    width: 300px;
-    margin: -1px;
+.app .side-bar-container .panel-group .panel {
+    border-radius: 0;
 }
-.app .side-bar-container .magic-zoom {
-    position: relative;
+.app .side-bar-container .panel-group .panel {
+    margin-top: -1px;
+}
+.app .side-bar-container .panel-group {
+    margin: -1px;
 }
 
 /* CENTER (MAP) */
 .app .center-container {
     position: absolute;
-    top: 75px;
-    left: 310px;
+    top: 5px;
+    left: 5px;
     bottom: 5px;
-    right: 5px;
-    overflow: hidden;
+    right: 310px;
 }
-.app .center-container [data-dojo-attach-point='mapDiv'] {
+.app .center-container .map-div {
     position: absolute;
     top: 0;
     bottom: 0;
     left: 0;
     right: 0;
+}
+
+.app .center-container .grid-identify-container {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    border-top: 0 solid #b5bcc7;
+    height: 0;
+    overflow: hidden;
 }
 
 /* GENERAL STUFF */
