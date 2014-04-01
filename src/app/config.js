@@ -16,7 +16,16 @@ define(['dojo/has'], function(has) {
         apiKey: '',
 
         urls: {
-            vector: 'http://mapserv.utah.gov/arcgis/rest/services/BaseMaps/Vector/MapServer'
+            map: '/arcgis/rest/services/PublicUtilities/Utilities/MapServer'
+        },
+        topics: {
+            appMapReferenceLayerToggle: {
+                addLayer: 'app.ReferenceLayerToggle.addLayer',
+                toggleLayer: 'app.ReferenceLayerToggle.toggleLayer'
+            },
+            appQueryLayer: {
+                addLayer: 'app.QueryLayer.addLayer'
+            }
         }
     };
 

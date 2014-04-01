@@ -12,9 +12,10 @@ define([
     'dijit/_WidgetsInTemplateMixin',
     'dijit/registry',
 
-    'agrc/widgets/map/BaseMap',
-    'agrc/widgets/map/BaseMapSelector',
+    
     'agrc/widgets/locate/FindAddress',
+
+    './MapController',
 
     './config'
 ], function(
@@ -31,9 +32,9 @@ define([
     _WidgetsInTemplateMixin,
     registry,
 
-    BaseMap,
-    BaseMapSelector,
     FindAddress,
+
+    MapController,
 
     config
 ) {
@@ -48,9 +49,6 @@ define([
         // childWidgets: Object[]
         //      container for holding custom child widgets
         childWidgets: null,
-
-        // map: agrc.widgets.map.Basemap
-        map: null,
 
         constructor: function() {
             // summary:
@@ -67,11 +65,11 @@ define([
             //      Fires when
             console.log('app.App::postCreate', arguments);
 
-            this.initMap();
+            MapController.init({mapDiv: this.mapDiv});
 
             this.childWidgets.push(
                 new FindAddress({
-                    map: this.map,
+                    map: MapController.map,
                     title: 'Find the providers for my address',
                     apiKey: config.apiKey
                 }, this.geocodeNode)
@@ -97,15 +95,7 @@ define([
             //      Sets up the map
             console.info('app.App::initMap', arguments);
 
-            this.map = new BaseMap(this.mapDiv, {
-                defaultBaseMap: 'Lite'
-            });
-
-            this.childWidgets.push(new BaseMapSelector({
-                map: this.map,
-                id: 'claro',
-                position: 'TR'
-            }));
+            
         }
     });
 });
