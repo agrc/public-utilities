@@ -30,8 +30,14 @@
         }, [
             'app/LayerItem',
 
+            'dojo/on',
+
             'dojo/domReady!'
-        ], function(Module) {
+        ], function(
+            Module,
+
+            on
+            ) {
             widgetUnderTest = new Module({
                 group: 'layerPicker',
                 labelText: 'Water Service Areas',
@@ -45,6 +51,11 @@
 
             another.startup();
             widgetUnderTest.startup();
+
+            on(widgetUnderTest,'map-layer-activated', function(e){
+                console.log('text');
+                console.log(e);
+            });
         });
 </script>
 </head>

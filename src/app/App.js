@@ -96,22 +96,11 @@ define([
             //      Fires after postCreate when all of the child widgets are finished laying out.
             console.log('app.App::startup', arguments);
 
-            MapController.startup();
-
             array.forEach(this.childWidgets, function(widget) {
                 this.own(widget);
                 widget.startup();
             }, this);
 
-            this.inherited(arguments);
-        },
-        destroy: function() {
-            // summary:
-            //      manually destroy the map controller
-            // 
-            console.log('app.App::destroy', arguments);
-
-            this.MapController.destroy();
             this.inherited(arguments);
         }
     });

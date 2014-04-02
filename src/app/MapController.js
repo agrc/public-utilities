@@ -57,6 +57,8 @@ define([
                 position: 'TR'
             });
 
+            this.layers = [];
+
             this.setUpSubscribes();
         },
         setUpSubscribes: function() {
@@ -65,10 +67,8 @@ define([
             console.log('app.MapController::setUpSubscribes', arguments);
 
             this.handles.push(
-                topic.subscribe(config.topics.map.addLayer,
-                    lang.hitch(this, 'addLayer')),
-                topic.subscribe(config.topics.map.toggleLayer,
-                    lang.hitch(this, 'toggleLayer'))
+                topic.subscribe(config.topics.map.enableLayer,
+                    lang.hitch(this, 'addLayer'))
             );
         },
         addLayer: function(props) {
@@ -79,11 +79,13 @@ define([
             console.log('app.MapController::addLayer', arguments);
 
             // check to see if layer has already been added to the map
-            var that = this;
             var lyr;
-            var alreadyAdded = array.some(this.map.layerIds, function(id) {
-                return that.map.getLayer(id).url === props.url;
-            });
+            var alreadyAdded = array.some(this.map.graphicsLayerIds, function(id) {
+                console.log('app.MapController::addLayer||looping ids ', id);
+                return id === props.id;
+            }, this);
+
+            console.log('app.MapController::addLayer||already added ', alreadyAdded);
 
             if (!alreadyAdded) {
                 var LayerClass;
@@ -105,46 +107,26 @@ define([
                         }
                 }
 
-                var config = lang.mixin({}, props.layerProps);
-
-                lyr = new LayerClass(props.url, config);
+                lyr = new LayerClass(props.url, {
+                    id: props.id,
+                    visible: false
+                });
 
                 this.map.addLayer(lyr);
                 this.map.addLoaderToLayer(lyr);
 
-                if (props.layerIndex !== null) {
-                    lyr.setVisibleLayers([-1]);
-                    lyr.show();
-                }
+                this.layers.push(lyr);
             }
-        },
-        toggleLayer: function(url, layerIndex, on) {
-            // summary:
-            //      toggles a reference layer on the map
 
-            console.log('app.MapController::toggleLayer', arguments);
+            var visibleLayer = array.filter(this.layers, function(layer) {
+                console.log('app.MapController::addLayer||hiding layer ', layer.id);
+                layer.hide();
+                return layer.id === props.id;
+            }, this)[0];
 
-            var lyr;
-            var that = this;
-            array.some(this.map.layerIds, function(id) {
-                var l = that.map.getLayer(id);
-                if (l.url === url) {
-                    lyr = l;
-                    return true;
-                }
-            });
-
-            if (layerIndex !== null) {
-                var visLyrs = lyr.visibleLayers;
-                if (on) {
-                    visLyrs.push(layerIndex);
-                } else {
-                    visLyrs.splice(array.indexOf(visLyrs, layerIndex), 1);
-                }
-                lyr.setVisibleLayers(visLyrs);
-            } else {
-                var f = (on) ? lyr.show : lyr.hide;
-                f.apply(lyr);
+            if(visibleLayer)
+            {
+                visibleLayer.show();
             }
         },
         destroy: function() {

@@ -1,4 +1,4 @@
-(function () {
+(function() {
     // the baseUrl is relavant in source version and while running unit tests.
     // the`typeof` is for when this file is passed as a require argument to the build system
     // since it runs on node, it doesn't have a window object. The basePath for the build system
@@ -8,7 +8,7 @@
             typeof window !== 'undefined' &&
             window.dojoConfig &&
             window.dojoConfig.isJasmineTestRunner
-            ) ? '/src': './',
+        ) ? '/src' : './',
         packages: [
             'agrc',
             'app',
@@ -17,11 +17,15 @@
             'dojox',
             'esri',
             'ijit',
-            {
+            'matchers', {
+                name: 'stubmodule',
+                location: 'stubmodule/src',
+                main: 'stubmodule'
+            }, {
                 name: 'jquery',
                 location: 'jquery/dist',
                 main: 'jquery'
-            },{
+            }, {
                 name: 'bootstrap',
                 location: 'bootstrap',
                 main: 'dist/js/bootstrap'
@@ -29,37 +33,37 @@
         ]
     };
     require(config, [
-        'jquery',
+            'jquery',
 
-        'app/App',
+            'app/App',
 
-        'dojo/_base/lang',
-        'dojo/dom',
+            'dojo/_base/lang',
+            'dojo/dom',
 
-        'esri/config',
+            'esri/config',
 
 
-        'dojo/domReady!'
-    ],
+            'dojo/domReady!'
+        ],
 
-    function (
-        $,
+        function(
+            $,
 
-        App,
+            App,
 
-        lang,
-        dom,
+            lang,
+            dom,
 
-        esriConfig
+            esriConfig
         ) {
-        // force api to use CORS on mapserv thus removing the test request on app load
-        // e.g. http://mapserv.utah.gov/ArcGIS/rest/info?f=json
-        esriConfig.defaults.io.corsEnabledServers.push('mapserv.utah.gov');
+            // force api to use CORS on mapserv thus removing the test request on app load
+            // e.g. http://mapserv.utah.gov/ArcGIS/rest/info?f=json
+            esriConfig.defaults.io.corsEnabledServers.push('mapserv.utah.gov');
 
-        // don't initialize if this is the jasmine test runner
-        if (!lang.getObject('dojoConfig.isJasmineTestRunner')) {
-            var app = new App({}, dom.byId('appDiv'));
-            app.startup();
-        }
-    });
+            // don't initialize if this is the jasmine test runner
+            if (!lang.getObject('dojoConfig.isJasmineTestRunner')) {
+                var app = new App({}, dom.byId('appDiv'));
+                app.startup();
+            }
+        });
 })();

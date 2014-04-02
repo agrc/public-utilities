@@ -3,12 +3,16 @@ define([
 
     'dojo/_base/declare',
 
+    'dojo/on',
+
     'dijit/_WidgetBase',
     'dijit/_TemplatedMixin'
 ], function(
     template,
 
     declare,
+
+    on,
 
     _WidgetBase,
     _TemplatedMixin
@@ -21,7 +25,7 @@ define([
         baseClass: 'layer-item',
 
         // Properties to be sent into constructor
-        
+
         // group: string
         // summary:
         //      the radio button group name 
@@ -59,6 +63,22 @@ define([
             //
             console.log('app.LayerItem::setupConnections', arguments);
 
+        },
+        activated: function() {
+            // summary:
+            //      called on click and emit's it's data
+            // 
+            console.log('app.LayerItem::activated', arguments);
+
+            on.emit(this.domNode, 'map-layer-activated', {
+                layerInfo: {
+                    url: this.url,
+                    id: this.value,
+                    serviceType: this.serviceType
+                },
+                bubbles: true,
+                cancelable: false
+            });
         }
     });
 });

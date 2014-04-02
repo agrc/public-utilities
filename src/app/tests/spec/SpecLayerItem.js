@@ -13,13 +13,18 @@ require([
 ) {
     describe('app/LayerItem', function() {
         var widget;
-        var destroy = function (widget) {
+        var destroy = function(widget) {
             widget.destroyRecursive();
             widget = null;
         };
 
         beforeEach(function() {
-            widget = new WidgetUnderTest(null, domConstruct.create('div', null, win.body()));
+            widget = new WidgetUnderTest({
+                group: 'group',
+                value: 'value2',
+                url: '//url2',
+                labelText: 'labelText2'
+            }, domConstruct.create('div', null, win.body()));
         });
 
         afterEach(function() {

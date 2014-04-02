@@ -4,11 +4,15 @@ define([
     'dojo/_base/declare',
     'dojo/_base/array',
 
+    'dojo/on',
+    'dojo/topic',
+
     'dijit/_WidgetBase',
     'dijit/_TemplatedMixin',
     'dijit/_WidgetsInTemplateMixin',
 
     './LayerItem',
+    './config',
 
     './data/mapLayers'
 ], function(
@@ -17,11 +21,15 @@ define([
     declare,
     array,
 
+    on,
+    topic,
+
     _WidgetBase,
     _TemplatedMixin,
     _WidgetsInTemplateMixin,
 
     LayerItem,
+    config,
 
     mapLayers
 ) {
@@ -44,18 +52,28 @@ define([
 
             this.childWidgets = [];
 
-            array.forEach(mapLayers, function(layerInfo){
-                this.childWidgets.push(new LayerItem(layerInfo).placeAt(this.listItems, 'last'));
+            array.forEach(mapLayers, function(layerInfo) {
+                var item = new LayerItem(layerInfo).placeAt(this.listItems, 'last');
+                item.on('map-layer-activated', this.notifyMap);
+                this.childWidgets.push(item);
             }, this);
 
             this.inherited(arguments);
+        },
+        notifyMap: function(e) {
+            // summary:
+            //      wire up events and such
+            // 
+            console.log('app.LayerPicker::notifyMap', arguments);
+
+            topic.publish(config.topics.map.enableLayer, e.layerInfo);
         },
         startup: function() {
             // summary:
             //      startup
             console.log('app.LayerPicker::startup', arguments);
 
-            array.forEach(this.childWidgets, function (widget) {
+            array.forEach(this.childWidgets, function(widget) {
                 this.own(widget);
                 widget.startup();
             }, this);

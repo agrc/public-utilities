@@ -13,8 +13,7 @@ define(['dojo/has'], function(has) {
 
         topics: {
             map: {
-                addLayer: 'app.addLayer',
-                toggleLayer: 'app.toggleLayer'
+                enableLayer: 'app.addLayer'
             }
         }
     };
