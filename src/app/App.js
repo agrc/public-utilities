@@ -12,12 +12,17 @@ define([
     'dijit/_WidgetsInTemplateMixin',
     'dijit/registry',
 
-    
+    'dijit/form/HorizontalSlider',
+
     'agrc/widgets/locate/FindAddress',
 
     './MapController',
+    './LayerPicker',
 
-    './config'
+    './config',
+
+
+    'dojo/domReady!'
 ], function(
     template,
 
@@ -32,9 +37,12 @@ define([
     _WidgetsInTemplateMixin,
     registry,
 
+    HorizontalSlider,
+
     FindAddress,
 
     MapController,
+    LayerPicker,
 
     config
 ) {
@@ -65,14 +73,20 @@ define([
             //      Fires when
             console.log('app.App::postCreate', arguments);
 
-            MapController.init({mapDiv: this.mapDiv});
+            MapController.init({
+                mapDiv: this.mapDiv
+            });
 
             this.childWidgets.push(
                 new FindAddress({
                     map: MapController.map,
-                    title: 'Find the providers for my address',
+                    title: 'Find providers for my address',
                     apiKey: config.apiKey
-                }, this.geocodeNode)
+                }, this.geocodeNode),
+                new LayerPicker({
+
+                }, this.layerPickerNode),
+                new HorizontalSlider({}, this.sliderNode)
             );
 
             this.inherited(arguments);
@@ -82,20 +96,23 @@ define([
             //      Fires after postCreate when all of the child widgets are finished laying out.
             console.log('app.App::startup', arguments);
 
-            var that = this;
-            array.forEach(this.childWidgets, function (widget) {
-                that.own(widget);
+            MapController.startup();
+
+            array.forEach(this.childWidgets, function(widget) {
+                this.own(widget);
                 widget.startup();
-            });
+            }, this);
 
             this.inherited(arguments);
         },
-        initMap: function() {
+        destroy: function() {
             // summary:
-            //      Sets up the map
-            console.info('app.App::initMap', arguments);
+            //      manually destroy the map controller
+            // 
+            console.log('app.App::destroy', arguments);
 
-            
+            this.MapController.destroy();
+            this.inherited(arguments);
         }
     });
 });

@@ -7,24 +7,14 @@ define(['dojo/has'], function(has) {
         //      global reference to App
         app: null,
 
-        // version: String
-        //      The version number.
-        version: '0.1.0',
-
         // apiKey: String
         //      The api key used for services on api.mapserv.utah.gov
-        apiKey: '',
+        apiKey: null,
 
-        urls: {
-            map: '/arcgis/rest/services/PublicUtilities/Utilities/MapServer'
-        },
         topics: {
-            appMapReferenceLayerToggle: {
-                addLayer: 'app.ReferenceLayerToggle.addLayer',
-                toggleLayer: 'app.ReferenceLayerToggle.toggleLayer'
-            },
-            appQueryLayer: {
-                addLayer: 'app.QueryLayer.addLayer'
+            map: {
+                addLayer: 'app.addLayer',
+                toggleLayer: 'app.toggleLayer'
             }
         }
     };

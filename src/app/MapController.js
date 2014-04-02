@@ -6,12 +6,12 @@ define([
 
     'esri/layers/ArcGISDynamicMapServiceLayer',
     'esri/layers/ArcGISTiledMapServiceLayer',
+    'esri/layers/FeatureLayer',
 
     'agrc/widgets/map/BaseMap',
     'agrc/widgets/map/BaseMapSelector',
 
     './config'
-
 ], function(
     lang,
     array,
@@ -20,6 +20,7 @@ define([
 
     ArcGISDynamicMapServiceLayer,
     ArcGISTiledMapServiceLayer,
+    FeatureLayer,
 
     BaseMap,
     BaseMapSelector,
@@ -39,7 +40,7 @@ define([
         // map: agrc/widgets/map/BaseMap
         map: null,
 
-        init: function (params) {
+        init: function(params) {
             // summary:
             //      description
             console.log('app.MapController::init', arguments);
@@ -58,65 +59,81 @@ define([
 
             this.setUpSubscribes();
         },
-        setUpSubscribes: function () {
+        setUpSubscribes: function() {
             // summary:
             //      subscribes to topics
             console.log('app.MapController::setUpSubscribes', arguments);
-        
+
             this.handles.push(
-                topic.subscribe(config.topics.appMapReferenceLayerToggle.addLayer,
-                    lang.hitch(this, 'addReferenceLayer')),
-                topic.subscribe(config.topics.appMapReferenceLayerToggle.toggleLayer,
-                    lang.hitch(this, 'toggleReferenceLayer')),
-                topic.subscribe(config.topics.appQueryLayer.addLayer,
-                    lang.hitch(this, 'addQueryLayer'))
+                topic.subscribe(config.topics.map.addLayer,
+                    lang.hitch(this, 'addLayer')),
+                topic.subscribe(config.topics.map.toggleLayer,
+                    lang.hitch(this, 'toggleLayer'))
             );
         },
-        addReferenceLayer: function (url, tiledService, layerIndex, layerProps) {
+        addLayer: function(props) {
             // summary:
             //      description
-            // layer: esri/layer
-            // layerIndex: Number
-            console.log('app.MapController::addReferenceLayer', arguments);
-        
+            // props: object
+            //  { url, serviceType, layerIndex, layerProps }
+            console.log('app.MapController::addLayer', arguments);
+
             // check to see if layer has already been added to the map
             var that = this;
             var lyr;
-            var alreadyAdded = array.some(this.map.layerIds, function (id) {
-                return that.map.getLayer(id).url === url;
+            var alreadyAdded = array.some(this.map.layerIds, function(id) {
+                return that.map.getLayer(id).url === props.url;
             });
 
             if (!alreadyAdded) {
-                var LayerClass = (tiledService) ? ArcGISTiledMapServiceLayer : ArcGISDynamicMapServiceLayer;
-                var config = lang.mixin({visible: false}, layerProps);
+                var LayerClass;
+                switch (props.serviceType || 'dynamic') {
+                    case 'feature':
+                        {
+                            LayerClass = FeatureLayer;
+                            break;
+                        }
+                    case 'tiled':
+                        {
+                            LayerClass = ArcGISTiledMapServiceLayer;
+                            break;
+                        }
+                    default:
+                        {
+                            LayerClass = ArcGISDynamicMapServiceLayer;
+                            break;
+                        }
+                }
 
-                lyr = new LayerClass(url, config);
+                var config = lang.mixin({}, props.layerProps);
+
+                lyr = new LayerClass(props.url, config);
 
                 this.map.addLayer(lyr);
                 this.map.addLoaderToLayer(lyr);
 
-                if (layerIndex !== null) {
+                if (props.layerIndex !== null) {
                     lyr.setVisibleLayers([-1]);
                     lyr.show();
                 }
             }
         },
-        toggleReferenceLayer: function (url, layerIndex, on) {
+        toggleLayer: function(url, layerIndex, on) {
             // summary:
             //      toggles a reference layer on the map
 
-            console.log('app.MapController::toggleReferenceLayer', arguments);
+            console.log('app.MapController::toggleLayer', arguments);
 
             var lyr;
             var that = this;
-            array.some(this.map.layerIds, function (id) {
+            array.some(this.map.layerIds, function(id) {
                 var l = that.map.getLayer(id);
                 if (l.url === url) {
                     lyr = l;
                     return true;
                 }
             });
-        
+
             if (layerIndex !== null) {
                 var visLyrs = lyr.visibleLayers;
                 if (on) {
@@ -130,21 +147,12 @@ define([
                 f.apply(lyr);
             }
         },
-        addQueryLayer: function (layer) {
-            // summary:
-            //      adds the query layer Feature Layer to the map
-            // layer: esri/layers/FeatureLayer
-            console.log('app.MapControl::addQueryLayer', arguments);
-        
-            this.map.addLayer(layer);
-            this.map.addLoaderToLayer(layer);
-        },
-        destroy: function () {
+        destroy: function() {
             // summary:
             //      destroys all handles
             console.log('app.MapControl::destroy', arguments);
-        
-            array.forEach(this.handles, function (hand) {
+
+            array.forEach(this.handles, function(hand) {
                 hand.remove();
             });
 

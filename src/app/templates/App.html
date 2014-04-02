@@ -1,12 +1,12 @@
 <div>
     <div data-dojo-attach-point='sideBar' class='side-bar-container container-with-border'>
         <div class="side-bar-padder">
-            <p class="text-info">Click on the map to see the service area providers for that location.</p>
-            <small class='text-muted'>Disclaimer: This map depicts service area boundaries for electric, gas, telephone utilities, and water. Boundaries are approximate and based on information provided to the Utah Division of Public Utilities.</small>
+            <p class="text-info"><span class="glyphicon glyphicon-map-marker"></span> Click on the map to see the service area providers for that location.</p>
             <h4>Find Address</h4>
             <div data-dojo-attach-point='geocodeNode'></div>
-            <div>Slider Transparency</div>
-            <div>Data Layer list</div>
+            <div data-dojo-attach-point="sliderNode">Slider Transparency</div>
+            <div data-dojo-attach-point='layerPickerNode'>Data Layer list</div>
+            <small class='text-muted pull-bottom'>Disclaimer: This map depicts service area boundaries for electric, gas, telephone utilities, and water. Boundaries are approximate and based on information provided to the Utah Division of Public Utilities.</small>
         </div>
     </div>
     <div data-dojo-attach-point='centerContainer'
