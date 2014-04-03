@@ -62,8 +62,7 @@ define([
         },
         notifyMap: function(e) {
             // summary:
-            //      wire up events and such
-            // 
+            //      tell the map controller to do stuff
             console.log('app.LayerPicker::notifyMap', arguments);
 
             topic.publish(config.topics.map.enableLayer, e.layerInfo);

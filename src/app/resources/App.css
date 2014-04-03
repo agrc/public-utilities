@@ -3,6 +3,7 @@
 @import '../../agrc/resources/map/BaseMap.css';
 @import '../../agrc/resources/map/BaseMapSelector.css';
 @import '../../agrc/resources/locate/FindAddress.css';
+@import './OpacitySlider.css';
 
 body, html, .app {
     width: 100%;
@@ -67,9 +68,4 @@ body, html, .app {
 /* remove orange outline in chrome */
 *:focus {
     outline: none;
-}
-
-.app .pull-bottom{
-    bottom: 0;
-    position: absolute;
 }

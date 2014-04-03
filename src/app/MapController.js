@@ -68,24 +68,26 @@ define([
 
             this.handles.push(
                 topic.subscribe(config.topics.map.enableLayer,
-                    lang.hitch(this, 'addLayer'))
+                    lang.hitch(this, 'addLayerAndMakeVisible')),
+                topic.subscribe(config.topics.map.layerOpacity,
+                    lang.hitch(this, 'updateOpacity'))
             );
         },
-        addLayer: function(props) {
+        addLayerAndMakeVisible: function(props) {
             // summary:
             //      description
             // props: object
             //  { url, serviceType, layerIndex, layerProps }
-            console.log('app.MapController::addLayer', arguments);
+            console.log('app.MapController::addLayerAndMakeVisible', arguments);
 
             // check to see if layer has already been added to the map
             var lyr;
             var alreadyAdded = array.some(this.map.graphicsLayerIds, function(id) {
-                console.log('app.MapController::addLayer||looping ids ', id);
+                console.log('app.MapController::addLayerAndMakeVisible||looping ids ', id);
                 return id === props.id;
             }, this);
 
-            console.log('app.MapController::addLayer||already added ', alreadyAdded);
+            console.log('app.MapController::addLayerAndMakeVisible||already added ', alreadyAdded);
 
             if (!alreadyAdded) {
                 var LayerClass;
@@ -115,19 +117,39 @@ define([
                 this.map.addLayer(lyr);
                 this.map.addLoaderToLayer(lyr);
 
-                this.layers.push(lyr);
+                this.layers.push({
+                    id: props.id,
+                    layer: lyr
+                });
             }
 
-            var visibleLayer = array.filter(this.layers, function(layer) {
-                console.log('app.MapController::addLayer||hiding layer ', layer.id);
-                layer.hide();
-                return layer.id === props.id;
+            this.activeLayer = array.filter(this.layers, function(container) {
+                console.log('app.MapController::addLayerAndMakeVisible||hiding layer ', container.id);
+                container.layer.hide();
+                return container.id === props.id;
             }, this)[0];
 
-            if(visibleLayer)
-            {
-                visibleLayer.show();
+            if (this.activeLayer) {
+                this.updateOpacity();
+                this.activeLayer.layer.show();
             }
+        },
+        updateOpacity: function(opacity) {
+            // summary:
+            //      changes a layers opacity
+            // opacity
+            console.log('app.MapController::updateOpacity', arguments);
+
+            if (opacity !== undefined) {
+                this.currentOpacity = opacity / 100;
+            }
+
+            if (!this.activeLayer) {
+                //no layer selected yet return
+                return;
+            }
+
+            this.activeLayer.layer.setOpacity(this.currentOpacity);
         },
         destroy: function() {
             // summary:

@@ -61,7 +61,7 @@ require([
         });
 
         describe('Map Layers', function() {
-            beforeEach(function () {
+            beforeEach(function (done) {
                 destroy(widget);
 
                 Topics.listen(topics.enableLayer);
@@ -71,6 +71,7 @@ require([
                 }).then(function(StubbedModule) {
                     widget = new StubbedModule(null, domConstruct.create('div', null, win.body()));
                     widget.startup();
+                    done();
                 });
             });
 

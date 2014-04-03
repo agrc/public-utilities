@@ -12,12 +12,11 @@ define([
     'dijit/_WidgetsInTemplateMixin',
     'dijit/registry',
 
-    'dijit/form/HorizontalSlider',
-
     'agrc/widgets/locate/FindAddress',
 
     './MapController',
     './LayerPicker',
+    './OpacitySlider',
 
     './config',
 
@@ -37,12 +36,11 @@ define([
     _WidgetsInTemplateMixin,
     registry,
 
-    HorizontalSlider,
-
     FindAddress,
 
     MapController,
     LayerPicker,
+    OpacitySlider,
 
     config
 ) {
@@ -86,7 +84,9 @@ define([
                 new LayerPicker({
 
                 }, this.layerPickerNode),
-                new HorizontalSlider({}, this.sliderNode)
+                new OpacitySlider({
+                    map: MapController.map
+                }, this.sliderNode)
             );
 
             this.inherited(arguments);

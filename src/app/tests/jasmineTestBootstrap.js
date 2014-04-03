@@ -2,5 +2,6 @@
 var dojoConfig = {
     has: {'dojo-undef-api': true},
     // packages: ['matchers'],
-    isJasmineTestRunner: true
+    isJasmineTestRunner: true,
+    packages: ['matchers']
 };
