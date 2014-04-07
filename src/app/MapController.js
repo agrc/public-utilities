@@ -2,11 +2,15 @@ define([
     'dojo/_base/lang',
     'dojo/_base/array',
 
+    'dojo/dom-construct',
+
     'dojo/topic',
 
     'esri/layers/ArcGISDynamicMapServiceLayer',
     'esri/layers/ArcGISTiledMapServiceLayer',
     'esri/layers/FeatureLayer',
+
+    'esri/dijit/InfoWindowLite',
 
     'agrc/widgets/map/BaseMap',
     'agrc/widgets/map/BaseMapSelector',
@@ -16,11 +20,15 @@ define([
     lang,
     array,
 
+    domConstruct,
+
     topic,
 
     ArcGISDynamicMapServiceLayer,
     ArcGISTiledMapServiceLayer,
     FeatureLayer,
+
+    InfoWindow,
 
     BaseMap,
     BaseMapSelector,
@@ -35,6 +43,10 @@ define([
         //      container to track handles for this object
         handles: [],
 
+        // childWidgets: array
+        // summary:
+        //      holds child widgets 
+        childWidgets: null,
 
         // Properties to be sent into constructor
         // map: agrc/widgets/map/BaseMap
@@ -47,9 +59,15 @@ define([
 
             lang.mixin(this, params);
 
+            this.childWidgets = [];
+
             this.map = new BaseMap(this.mapDiv, {
                 defaultBaseMap: 'Lite'
             });
+
+            this.childWidgets.push(
+                new InfoWindow(null, domConstruct.create('div', null, null, this.map.root))
+            );
 
             this.selector = new BaseMapSelector({
                 map: this.map,
@@ -150,6 +168,16 @@ define([
             }
 
             this.activeLayer.layer.setOpacity(this.currentOpacity);
+        },
+        startup: function() {
+            // summary:
+            //      startup once app is attached to dom
+            console.log('app.MapController::startup', arguments);
+
+            array.forEach(this.childWidgets, function(widget){
+                this.own(widget);
+                widget.startup();
+            }, this);
         },
         destroy: function() {
             // summary:
