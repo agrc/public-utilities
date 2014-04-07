@@ -1,7 +1,6 @@
 /*jshint unused:false*/
 var dojoConfig = {
     has: {'dojo-undef-api': true},
-    // packages: ['matchers'],
     isJasmineTestRunner: true,
-    packages: ['matchers', 'stubmodule']
+    packages: ['matchers']
 };

@@ -4,26 +4,26 @@ require([
 
     'dojo/_base/window',
 
-    'dojo/dom-construct',
+    'dojo/dom-construct'
 
-    'dojo/query',
+    //'dojo/query',
 
     // 'stubmodule',
 
-    'matchers/Topics'
+    //matchers/Topics'
 ], function(
     WidgetUnderTest,
     config,
 
     win,
 
-    domConstruct,
+    domConstruct
 
-    query,
+    //query,
 
     //stubmodule,
 
-    Topics
+    //Topics
 ) {
     describe('app/LayerPicker', function() {
         var widget;
@@ -31,18 +31,18 @@ require([
             widget.destroyRecursive();
             widget = null;
         };
-        var layerData = [{
-                group: 'group',
-                value: 'value',
-                url: '//url',
-                labelText: 'labelText'
-            }, {
-                group: 'group',
-                value: 'value2',
-                url: '//url2',
-                labelText: 'labelText2'
-            }];
-        var topics = config.topics.map;
+        // var layerData = [{
+        //         group: 'group',
+        //         value: 'value',
+        //         url: '//url',
+        //         labelText: 'labelText'
+        //     }, {
+        //         group: 'group',
+        //         value: 'value2',
+        //         url: '//url2',
+        //         labelText: 'labelText2'
+        //     }];
+        // var topics = config.topics.map;
 
         beforeEach(function() {
             widget = new WidgetUnderTest(null, domConstruct.create('div', null, win.body()));
