@@ -6,11 +6,13 @@ define([
 
     'dojo/topic',
 
+    'esri/InfoTemplate',
+
+    'esri/dijit/InfoWindowLite',
+
     'esri/layers/ArcGISDynamicMapServiceLayer',
     'esri/layers/ArcGISTiledMapServiceLayer',
     'esri/layers/FeatureLayer',
-
-    'esri/dijit/InfoWindowLite',
 
     'agrc/widgets/map/BaseMap',
     'agrc/widgets/map/BaseMapSelector',
@@ -24,11 +26,13 @@ define([
 
     topic,
 
+    InfoTemplate,
+
+    InfoWindow,
+
     ArcGISDynamicMapServiceLayer,
     ArcGISTiledMapServiceLayer,
     FeatureLayer,
-
-    InfoWindow,
 
     BaseMap,
     BaseMapSelector,
@@ -65,15 +69,18 @@ define([
                 defaultBaseMap: 'Lite'
             });
 
-            this.childWidgets.push(
-                new InfoWindow(null, domConstruct.create('div', null, null, this.map.root))
-            );
+            var infoWindow = new InfoWindow(null,
+                domConstruct.create('div', null, null, this.map.root));
 
-            this.selector = new BaseMapSelector({
-                map: this.map,
-                id: 'claro',
-                position: 'TR'
-            });
+            this.map.setInfoWindow(infoWindow);
+
+            this.childWidgets.push(
+                infoWindow,
+                new BaseMapSelector({
+                    map: this.map,
+                    id: 'claro',
+                    position: 'TR'
+                }));
 
             this.layers = [];
 
@@ -109,10 +116,21 @@ define([
 
             if (!alreadyAdded) {
                 var LayerClass;
+
+
                 switch (props.serviceType || 'dynamic') {
                     case 'feature':
                         {
                             LayerClass = FeatureLayer;
+
+                            var template = new InfoTemplate();
+                            template.setTitle('<b>Utility Information</b>');
+                            template.setContent('<dl><dt>Provider</dt><dd><a href="${WEBLINK}">${PROVIDER}</a></dd>' +
+                                '<dt>Telephone</dt><dd>${TELEPHONE}</dd></dl>');
+
+                            props.infoTemplate = template;
+                            props.visible = false;
+                            props.outFields = ['PROVIDER', 'WEBLINK', 'TELEPHONE'];
                             break;
                         }
                     case 'tiled':
@@ -127,13 +145,12 @@ define([
                         }
                 }
 
-                lyr = new LayerClass(props.url, {
-                    id: props.id,
-                    visible: false
-                });
+                lyr = new LayerClass(props.url, props);
 
                 this.map.addLayer(lyr);
                 this.map.addLoaderToLayer(lyr);
+
+                this.map.infoWindow.resize(155, 155);
 
                 this.layers.push({
                     id: props.id,
@@ -174,8 +191,7 @@ define([
             //      startup once app is attached to dom
             console.log('app.MapController::startup', arguments);
 
-            array.forEach(this.childWidgets, function(widget){
-                this.own(widget);
+            array.forEach(this.childWidgets, function(widget) {
                 widget.startup();
             }, this);
         },
@@ -188,7 +204,9 @@ define([
                 hand.remove();
             });
 
-            this.selector.destroy();
+            array.forEach(this.childWidgets, function(widget) {
+                widget.destroy();
+            }, this);
         }
     };
 });

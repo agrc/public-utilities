@@ -18,10 +18,6 @@
             'esri',
             'ijit',
             'matchers', {
-                name: 'stubmodule',
-                location: 'stubmodule/src',
-                main: 'stubmodule'
-            }, {
                 name: 'jquery',
                 location: 'jquery/dist',
                 main: 'jquery'
@@ -45,7 +41,6 @@
 
             'dojo/domReady!'
         ],
-
         function(
             $,
 
