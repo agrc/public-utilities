@@ -8,7 +8,7 @@ require([
 
     'dojo/query',
 
-    'stubmodule',
+    // 'stubmodule',
 
     'matchers/Topics'
 ], function(
@@ -21,7 +21,7 @@ require([
 
     query,
 
-    stubmodule,
+    //stubmodule,
 
     Topics
 ) {
@@ -60,29 +60,29 @@ require([
             });
         });
 
-        describe('Map Layers', function() {
-            beforeEach(function (done) {
-                destroy(widget);
+        // describe('Map Layers', function() {
+        //     beforeEach(function (done) {
+        //         destroy(widget);
 
-                Topics.listen(topics.enableLayer);
+        //         Topics.listen(topics.enableLayer);
 
-                stubmodule('app/LayerPicker', {
-                    'app/data/mapLayers': layerData
-                }).then(function(StubbedModule) {
-                    widget = new StubbedModule(null, domConstruct.create('div', null, win.body()));
-                    widget.startup();
-                    done();
-                });
-            });
+        //         stubmodule('app/LayerPicker', {
+        //             'app/data/mapLayers': layerData
+        //         }).then(function(StubbedModule) {
+        //             widget = new StubbedModule(null, domConstruct.create('div', null, win.body()));
+        //             widget.startup();
+        //             done();
+        //         });
+        //     });
 
-            it('creates a radio button for each map layer item', function() {
-                expect(query('input[type="radio"]', widget.domNode).length).toEqual(layerData.length);
-            });
+        //     it('creates a radio button for each map layer item', function() {
+        //         expect(query('input[type="radio"]', widget.domNode).length).toEqual(layerData.length);
+        //     });
 
-            it('publishes a topic when a layerItem is checked', function(){
-                widget.childWidgets[0].activated();
-                expect(topics.enableLayer).toHaveBeenPublished();
-            });
-        });
+        //     it('publishes a topic when a layerItem is checked', function(){
+        //         widget.childWidgets[0].activated();
+        //         expect(topics.enableLayer).toHaveBeenPublished();
+        //     });
+        // });
     });
 });
