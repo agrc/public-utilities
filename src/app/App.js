@@ -76,6 +76,7 @@ define([
             });
 
             this.childWidgets.push(
+                MapController,
                 new FindAddress({
                     map: MapController.map,
                     title: 'Find providers for my address',

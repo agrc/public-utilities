@@ -10,6 +10,6 @@
     "jquery": "~1",
     "agrc": "agrc-widgets#630640d27896e3792b31fce10d09f31094db6d5d",
     "ijit": "agrc-ijit#84eef80e8ba799d944b71cd74c18272c16d0f417",
-    "stubmodule": "~0.2"
+    "stubmodule": "~0"
   }
 }
