@@ -3,6 +3,7 @@
 .DS_Store
 .grunt/
 dist/
+deploy/
 node_modules/
 src/agrc/
 src/bootstrap/

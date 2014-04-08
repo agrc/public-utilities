@@ -15,15 +15,6 @@ module.exports = function(grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         jasmine: {
-            // for embedded map projects...
-            // app: {
-            //   src: ['src/EmbeddedMapLoader.js'],
-            //   options: {
-            //     specs: ['src/app/tests/spec/*.js']
-            //   }
-            // }
-
-            // for regular apps...
             'default': {
                 src: ['src/app/run.js'],
                 options: {
@@ -110,7 +101,7 @@ module.exports = function(grunt) {
         },
         bump: {
             options: {
-                files: ['package.json', 'src/app/package.json','src/app/main.js'],
+                files: ['package.json', 'src/app/package.json', 'src/app/main.js'],
                 commit: true,
                 commitFiles: ['-a'], // '-a' for all files
                 createTag: true,
@@ -118,6 +109,17 @@ module.exports = function(grunt) {
                 tagMessage: 'Version %VERSION%',
                 push: true,
                 pushTo: 'origin'
+            }
+        },
+        compress: {
+            main: {
+                options: {
+                    archive: 'deploy/public-utilities.zip'
+                },
+                files: [{
+                    src: ['dist/**'],
+                    dest: '/'
+                }]
             }
         }
     });
@@ -132,10 +134,11 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-dojo');
     grunt.loadNpmTasks('grunt-newer');
     grunt.loadNpmTasks('grunt-bump');
+    grunt.loadNpmTasks('grunt-contrib-compress');
 
     // Default task.
     grunt.registerTask('default', ['jasmine:default:build', 'jshint', 'connect', 'watch']);
-    grunt.registerTask('build', ['dojo:prod', 'replace:dist', 'newer:imagemin:dynamic']);
-    grunt.registerTask('stage-build', ['dojo:stage', 'replace:dist', 'newer:imagemin:dynamic']);
+    grunt.registerTask('build', ['dojo:prod', 'replace:dist', 'newer:imagemin:dynamic', 'compress']);
+    grunt.registerTask('stage-build', ['dojo:stage', 'replace:dist', 'newer:imagemin:dynamic', 'compress']);
     grunt.registerTask('travis', ['jshint', 'connect', 'jasmine:default']);
 };

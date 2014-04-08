@@ -4,5 +4,5 @@
     "main": "main",
     "description": "public utilities",
     "homepage": "https://github.com/agrc/public-utilities",
-    "dojoBuild": "build.profile.js"
+    "dojoBuild": "app.profile.js"
 }
