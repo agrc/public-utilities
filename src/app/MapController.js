@@ -249,6 +249,7 @@ define([
             }
 
             var content = this.buildContent(graphic.attributes);
+            this.map.infoWindow.setTitle('Provider Information');
             this.map.infoWindow.setContent(content);
 
             //var highlightgraphic = new graphic(evt.graphic.geometry, highlightSymbol);
