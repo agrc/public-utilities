@@ -9,7 +9,10 @@ define([
     'dijit/_TemplatedMixin',
     'dijit/_WidgetsInTemplateMixin',
 
-    './config'
+    './config',
+
+
+    'dijit/form/HorizontalSlider'
 ], function(
     template,
 

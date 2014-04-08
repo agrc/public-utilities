@@ -1,18 +1,23 @@
 define([
     'dojo/_base/lang',
     'dojo/_base/array',
+    'dojo/_base/Color',
 
     'dojo/dom-construct',
 
     'dojo/topic',
 
     'esri/InfoTemplate',
+    'esri/graphic',
+    'esri/lang',
 
     'esri/dijit/InfoWindowLite',
 
     'esri/layers/ArcGISDynamicMapServiceLayer',
     'esri/layers/ArcGISTiledMapServiceLayer',
     'esri/layers/FeatureLayer',
+
+    'esri/symbols/SimpleLineSymbol',
 
     'agrc/widgets/map/BaseMap',
     'agrc/widgets/map/BaseMapSelector',
@@ -21,18 +26,23 @@ define([
 ], function(
     lang,
     array,
+    Color,
 
     domConstruct,
 
     topic,
 
     InfoTemplate,
+    Graphic,
+    esriLang,
 
     InfoWindow,
 
     ArcGISDynamicMapServiceLayer,
     ArcGISTiledMapServiceLayer,
     FeatureLayer,
+
+    LineSymbol,
 
     BaseMap,
     BaseMapSelector,
@@ -73,6 +83,8 @@ define([
                 domConstruct.create('div', null, null, this.map.root));
 
             this.map.setInfoWindow(infoWindow);
+
+            this.symbol = new LineSymbol(LineSymbol.STYLE_SOLID, new Color('#F012BE'), 3);
 
             this.childWidgets.push(
                 infoWindow,
@@ -117,18 +129,15 @@ define([
             if (!alreadyAdded) {
                 var LayerClass;
 
-
                 switch (props.serviceType || 'dynamic') {
                     case 'feature':
                         {
                             LayerClass = FeatureLayer;
 
-                            var template = new InfoTemplate();
-                            template.setTitle('<b>Utility Information</b>');
-                            template.setContent('<dl><dt>Provider</dt><dd><a href="${WEBLINK}">${PROVIDER}</a></dd>' +
-                                '<dt>Telephone</dt><dd>${TELEPHONE}</dd></dl>');
+                            this.infoTemplate = new InfoTemplate();
+                            this.infoTemplate.setTitle('<b>Utility Information</b>');
 
-                            props.infoTemplate = template;
+                            //props.infoTemplate = infoTemplate;
                             props.visible = false;
                             props.outFields = ['PROVIDER', 'WEBLINK', 'TELEPHONE'];
                             break;
@@ -146,6 +155,14 @@ define([
                 }
 
                 lyr = new LayerClass(props.url, props);
+                lyr.on('click', lang.hitch(this, 'highlight'));
+                lyr.on('click', lang.hitch(this, 'showPopup'));
+
+                // var self = this;
+                // lyr.on('mouse-over', lang.hitch(this, 'showPopup'));
+                // lyr.on('mouse-out', function() {
+                //     self.map.infoWindow.hide();
+                // });
 
                 this.map.addLayer(lyr);
                 this.map.addLoaderToLayer(lyr);
@@ -165,6 +182,7 @@ define([
             }, this)[0];
 
             if (this.activeLayer) {
+                this.clearGraphic(this.graphic);
                 this.updateOpacity();
                 this.activeLayer.layer.show();
             }
@@ -194,6 +212,71 @@ define([
             array.forEach(this.childWidgets, function(widget) {
                 widget.startup();
             }, this);
+        },
+        highlight: function(evt) {
+            // summary:
+            //      adds the clicked shape geometry to the graphics layer
+            //      highlighting it
+            // evt - mouse click event
+            console.log('app.MapController::highlight', arguments);
+
+            this.clearGraphic(this.graphic);
+
+            this.graphic = new Graphic(evt.graphic.geometry, this.symbol);
+            this.map.graphics.add(this.graphic);
+        },
+        clearGraphic: function(graphic) {
+            // summary:
+            //      removes the graphic from the map
+            // graphic
+            console.log('app.MapController::clearGraphic', arguments);
+
+            if (graphic) {
+                this.map.graphics.remove(graphic);
+                this.graphic = null;
+            }
+        },
+        showPopup: function(mouseEvent) {
+            // summary:
+            //      shows the popup content for the graphic on the mouse over event
+            // mouseEvent - mouse over event
+            console.log('app.MapController::showPopup', arguments);
+
+            var graphic = mouseEvent.graphic;
+
+            if (graphic === undefined) {
+                return;
+            }
+
+            var content = this.buildContent(graphic.attributes);
+            this.map.infoWindow.setContent(content);
+
+            //var highlightgraphic = new graphic(evt.graphic.geometry, highlightSymbol);
+            //map.graphics.add(highlightgraphic);
+
+            this.map.infoWindow.show(mouseEvent.screenPoint,
+                this.map.getInfoWindowAnchor(mouseEvent.screenPoint));
+        },
+        buildContent: function(attributes) {
+            // summary:
+            //      build the popup content text based on the attribute values
+            // attributes
+            console.log('app.MapController::buildContent', arguments);
+
+            var hasUrl = '<dl><dt>Provider</dt>' +
+                '<dd><a href="${WEBLINK}" target="_blank">${PROVIDER}</a>' +
+                '</dd><dt>Telephone</dt><dd>${TELEPHONE}</dd></dl>',
+                urlIsNa = '<dl><dt>Provider</dt><dd>${PROVIDER}<dt>Telephone</dt>' +
+                '<dd>${TELEPHONE}</dd></dl>',
+                template = '';
+
+            template = urlIsNa;
+
+            if (attributes && attributes.WEBLINK && attributes.WEBLINK !== 'N/A') {
+                template = hasUrl;
+            }
+
+            return esriLang.substitute(attributes, template);
         },
         destroy: function() {
             // summary:
