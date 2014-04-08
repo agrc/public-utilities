@@ -107,6 +107,18 @@ module.exports = function(grunt) {
                     dest: 'dist/' // Destination path prefix
                 }]
             }
+        },
+        bump: {
+            options: {
+                files: ['package.json', 'src/app/package.json','src/app/main.js'],
+                commit: true,
+                commitFiles: ['-a'], // '-a' for all files
+                createTag: true,
+                tagName: 'v%VERSION%',
+                tagMessage: 'Version %VERSION%',
+                push: true,
+                pushTo: 'origin'
+            }
         }
     });
 
@@ -119,6 +131,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-replace');
     grunt.loadNpmTasks('grunt-dojo');
     grunt.loadNpmTasks('grunt-newer');
+    grunt.loadNpmTasks('grunt-bump');
 
     // Default task.
     grunt.registerTask('default', ['jasmine:default:build', 'jshint', 'connect', 'watch']);

@@ -18,7 +18,7 @@ define([{
     url: '//services1.arcgis.com/99lidPhWCzftIe9K/arcgis/rest/services/' +
         'Utah_Natural_Gas_Service_(Approx)/FeatureServer/0',
     serviceType: 'feature',
-    labelText: 'Natural Gas Service Areas(Approx)'
+    labelText: 'Natural Gas Service Areas'
 }, {
     group: 'layers',
     value: 'telecom',

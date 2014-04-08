@@ -1,8 +1,8 @@
 {
     "name": "app",
-    "version": "0.1",
+    "version": "0.1.0",
     "main": "main",
-    "description": "AGRC Boilerplate",
-    "homepage": "https://github.com/agrc/AGRCJavaScriptProjectBoilerPlate",
-    "dojoBuild": "app.profile.js"
+    "description": "public utilities",
+    "homepage": "https://github.com/agrc/public-utilities",
+    "dojoBuild": "build.profile.js"
 }
