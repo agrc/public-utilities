@@ -1,6 +1,6 @@
 {
     "name": "app",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "main": "main",
     "description": "public utilities",
     "homepage": "https://github.com/agrc/public-utilities",
