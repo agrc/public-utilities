@@ -20,7 +20,7 @@ define(['dojo/has'], function(has) {
     };
 
     if (has('agrc-api-key') === 'prod') {
-        window.AGRC.apiKey = 'prod';
+        window.AGRC.apiKey = 'AGRC-70A279D7403807';
     } else if (has('agrc-api-key') === 'stage') {
         window.AGRC.apiKey = 'AGRC-FFCDAD6B933051';
     } else {

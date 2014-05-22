@@ -8,8 +8,8 @@
     "util": "dojo-util#~1.9",
     "bootstrap": "~3",
     "jquery": "~1",
-    "agrc": "agrc-widgets#630640d27896e3792b31fce10d09f31094db6d5d",
-    "ijit": "agrc-ijit#84eef80e8ba799d944b71cd74c18272c16d0f417",
+    "agrc": "agrc-widgets#882e1c3ceed6d7f01b8fb98d6568186752f66f52",
+    "ijit": "agrc-ijit#7ff6c2f5083a790c77fc72dd86a90ca01a2a89a5",
     "stubmodule": "~0"
   }
 }
