@@ -1,3 +1,4 @@
+# NOTE: This app has been retired in favor of [this AGOL app](http://utah.maps.arcgis.com/apps/Viewer/index.html?appid=573dfdb6220d4fada6d833def633b866)
 [![Build Status](https://travis-ci.org/agrc/public-utilities.svg?branch=master)](https://travis-ci.org/agrc/public-utilities)
 public utilities
 ===================================
